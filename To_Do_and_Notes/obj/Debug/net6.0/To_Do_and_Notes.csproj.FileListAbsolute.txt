@@ -1,0 +1,62 @@
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\appsettings.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.staticwebassets.runtime.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.exe
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.deps.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.runtimeconfig.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.pdb
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.csproj.AssemblyReference.cache
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.AssemblyInfoInputs.cache
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.AssemblyInfo.cs
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.csproj.CoreCompileInputs.cache
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.RazorAssemblyInfo.cache
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.RazorAssemblyInfo.cs
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.To_Do_and_Notes.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.build.To_Do_and_Notes.props
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.To_Do_and_Notes.props
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.To_Do_and_Notes.props
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets.pack.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\scopedcss\bundle\To_Do_and_Notes.styles.css
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\scopedcss\projectbundle\To_Do_and_Notes.bundle.scp.css
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\refint\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.pdb
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.genruntimeconfig.cache
+C:\Users\Serhii\Documents\My Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\ref\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\appsettings.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.staticwebassets.runtime.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.exe
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.deps.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.runtimeconfig.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\To_Do_and_Notes.pdb
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.csproj.AssemblyReference.cache
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.AssemblyInfoInputs.cache
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.AssemblyInfo.cs
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.csproj.CoreCompileInputs.cache
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.RazorAssemblyInfo.cache
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.RazorAssemblyInfo.cs
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.To_Do_and_Notes.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.build.To_Do_and_Notes.props
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.To_Do_and_Notes.props
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.To_Do_and_Notes.props
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets.pack.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\scopedcss\bundle\To_Do_and_Notes.styles.css
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\scopedcss\projectbundle\To_Do_and_Notes.bundle.scp.css
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\refint\To_Do_and_Notes.dll
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.pdb
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\To_Do_and_Notes.genruntimeconfig.cache
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\obj\Debug\net6.0\ref\To_Do_and_Notes.dll

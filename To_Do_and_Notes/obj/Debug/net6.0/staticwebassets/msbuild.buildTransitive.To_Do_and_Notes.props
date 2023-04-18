@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\To_Do_and_Notes.props" />
+</Project>

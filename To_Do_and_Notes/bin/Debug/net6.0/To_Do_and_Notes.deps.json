@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "To_Do_and_Notes/1.0.0": {
+        "runtime": {
+          "To_Do_and_Notes.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "To_Do_and_Notes/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
