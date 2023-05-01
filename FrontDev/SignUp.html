@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Sign Up</title>
+   <link rel="stylesheet" href="bootstrap-5.1.3-dist/css/bootstrap.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+   <style>
+      .container {
+         max-width: 30em;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         box-shadow: 0px 0px 10px #ccc;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="d-flex justify-content-center mt-3">
+      <a href="/" class="d-flex align-items-center mb-3 link-dark text-decoration-none fs-1">
+         <i class="bi bi-journal-check me-2"></i>
+         <span class="fs-3 fw-semibold">To do & Notes</span>
+      </a>
+   </div>
+   <div class="container mt-5 p-3">
+      <h4 class="text-center">
+         Реєстрація
+      </h4>
+
+      <form class="needs-validation" novalidate>
+         <div class="form-floating mt-3">
+            <input type="text" class="form-control" id="name" placeholder="Somename" required minlength="1"
+               maxlength="30" pattern="[A-Za-zА-Яа-яІіЇїЄєҐґ']+([ A-Za-zА-Яа-яІіЇїЄєҐґ']+)*">
+            <label for="name">Ім'я</label>
+            <div class="valid-feedback">
+               Виглядає добре!
+            </div>
+            <div class="invalid-feedback">
+               Вкажіть ім'я з 1-30 символів
+            </div>
+         </div>
+         <div class="form-floating mt-2">
+            <input type="email" class="form-control" id="email" placeholder="name@example.com" required pattern="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|&quot;(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|
+            \\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|
+            \[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:
+            (?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])">
+            <label for="email">Пошта</label>
+            <div class="valid-feedback">
+               Виглядає добре!
+            </div>
+            <div class="invalid-feedback">
+               Пошта некоректна (name@example.com)
+            </div>
+         </div>
+         <div class="form-floating mt-2">
+            <input type="password" class="form-control" id="pwd" placeholder="*******" required minlength="8"
+               maxlength="25">
+            <label for="pwd">Пароль</label>
+            <div class="valid-feedback">
+               Виглядає добре!
+            </div>
+            <div class="invalid-feedback">
+               Пароль некоректний (повинен містити 8-25 символів)
+            </div>
+         </div>
+         <div class="form-floating mt-2">
+            <input type="password" class="form-control" id="pwd2" placeholder="*******" required minlength="8"
+               maxlength="25">
+            <label for="pwd2">Повторіть пароль</label>
+            <div class="valid-feedback">
+               Виглядає добре!
+            </div>
+            <div class="invalid-feedback" id="pwd2InvalidFeedback">
+               Пароль некоректний (повинен містити 8-25 символів)
+            </div>
+         </div>
+         <button type="submit" class="btn btn-primary w-100 mt-2">Зареєструватися</button>
+         <p class="text-center mt-1">Вже є обліковий запис? <a href="#">Увійти</a></p>
+         <a href="" class="link-dark text-decoration-none">
+            <i class="bi bi-google fs-1 d-flex justify-content-center"></i>
+         </a>
+      </form>
+   </div>
+
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"></script>
+
+   <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function () {
+         'use strict'
+
+         // Fetch all the forms we want to apply custom Bootstrap validation styles to
+         var forms = document.querySelectorAll('.needs-validation')
+
+         // Loop over them and prevent submission
+         Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+               form.addEventListener('submit', function (event) {
+                  if (!form.checkValidity()) {
+                     event.preventDefault()
+                     event.stopPropagation()
+                  }
+
+                  form.classList.add('was-validated')
+               }, false)
+            })
+      })()
+
+      const pwdInput = document.getElementById('pwd');
+      const pwd2Input = document.getElementById('pwd2');
+      const pwd2InvalidFeedback = document.getElementById('pwd2InvalidFeedback');
+
+      function validatePasswords() {
+         if (pwdInput.value !== pwd2Input.value) {
+            pwd2Input.setCustomValidity('invalid');
+            pwd2InvalidFeedback.textContent = 'Паролі не співпадають';
+            pwd2InvalidFeedback.style.display = 'block';
+         } else {
+            pwd2Input.setCustomValidity('');
+            pwd2InvalidFeedback.style.display = 'none';
+         }
+      }
+
+      pwdInput.addEventListener('input', validatePasswords);
+      pwd2Input.addEventListener('input', validatePasswords);
+   </script>
+</body>
+
+</html>
