@@ -1,0 +1,49 @@
+body {
+   background: #599fd9;
+   background: -webkit-linear-gradient(to right, #599fd9, #c2e59c);
+   background: linear-gradient(to right, #599fd9, #c2e59c);
+   min-height: 100vh;
+   overflow-x: hidden;
+}
+
+.scrollable {
+   height: 85vh;
+   width: 100%;
+   overflow-y: scroll;
+   overflow-x: hidden;
+}
+
+.scrollable::-webkit-scrollbar {
+   width: 8px;
+   height: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+   background: #f1f1f1;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+   background: #888;
+   border-radius: 10px;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+   background: #555;
+}
+
+.card-body {
+   display: block;
+   /* or inline-block */
+   text-overflow: ellipsis;
+   word-wrap: break-word;
+   overflow: hidden;
+   max-height: 7em;
+   line-height: 1.8em;
+}
+
+textarea {
+   resize: none;
+   overflow: hidden;
+   height: 1em;
+   max-height: auto;
+}
