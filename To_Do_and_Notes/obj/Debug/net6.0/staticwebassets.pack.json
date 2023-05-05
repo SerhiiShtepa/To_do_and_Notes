@@ -1,20 +1,32 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\To_Do_and_Notes.bundle.scp.css",
-      "PackagePath": "staticwebassets\\To_Do_and_Notes.bundle.scp.css"
+      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\css\\Main.css",
+      "PackagePath": "staticwebassets\\css\\Main.css"
     },
     {
-      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\css\\site.css",
-      "PackagePath": "staticwebassets\\css\\site.css"
+      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\css\\sidebar.css",
+      "PackagePath": "staticwebassets\\css\\sidebar.css"
     },
     {
       "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\js\\site.js",
-      "PackagePath": "staticwebassets\\js\\site.js"
+      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\js\\Main.js",
+      "PackagePath": "staticwebassets\\js\\Main.js"
+    },
+    {
+      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\js\\sidebar.js",
+      "PackagePath": "staticwebassets\\js\\sidebar.js"
+    },
+    {
+      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\js\\summernote.js",
+      "PackagePath": "staticwebassets\\js\\summernote.js"
+    },
+    {
+      "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\js\\validation.js",
+      "PackagePath": "staticwebassets\\js\\validation.js"
     },
     {
       "Id": "C:\\Users\\Serhii\\Documents\\My_Projects\\To_Do_and_Notes\\To_Do_and_Notes\\wwwroot\\lib\\bootstrap\\LICENSE",
