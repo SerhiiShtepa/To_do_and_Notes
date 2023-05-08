@@ -10,7 +10,7 @@ namespace To_Do_and_Notes.Pages
     public class SignUpModel : PageModel
     {
         [BindProperty]
-        public User NewUser { get; set; }
+        public User? NewUser { get; set; }
 
         private readonly ToDoAndNotesDbContext _context;
         public UserService UserService { get; set; }
@@ -21,11 +21,19 @@ namespace To_Do_and_Notes.Pages
         }
         public void OnGet()
         {
+            
         }
         public IActionResult OnPost()
         {
-            UserService.AddUser(NewUser);
-            return RedirectToAction("Get");
+            if (UserService.SignUp(NewUser))
+            {
+                return RedirectToPage("Main");
+            }
+            else
+            {
+                ModelState.AddModelError("NewUser.Email", "Така пошта вже існує");
+                return Page();
+            }
         }
     }
 }
