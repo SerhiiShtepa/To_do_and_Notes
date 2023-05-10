@@ -25,14 +25,16 @@ namespace To_Do_and_Notes.Pages
         }
         public IActionResult OnPost()
         {
-            if (UserService.SignUp(NewUser))
+            int userId = UserService.SignUp(NewUser); // get user id from db
+            if (userId == -1)
             {
-                return RedirectToPage("Main");
+                ModelState.AddModelError("NewUser.Email", "Така пошта вже існує");
+                return Page();              
             }
             else
             {
-                ModelState.AddModelError("NewUser.Email", "Така пошта вже існує");
-                return Page();
+                HttpContext.Session.SetInt32("UserId", userId);
+                return RedirectToPage("Main");
             }
         }
     }

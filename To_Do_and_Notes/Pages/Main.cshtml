@@ -39,6 +39,21 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script src="~/js/summernote.js"></script>
 }
+@section NewFolder
+{
+    <div class="ps-2 border-top border-bottom">
+        <div class="btn btn-toggle d-inline-flex fs-4 w-100">
+            <form method="post" asp-page-handler="CreateFolder">
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-link invisible-button p-0"><i class="bi bi-folder-plus fs-2 me-2"></i></button>
+                    <textarea asp-for="NewFolder.Name" oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
+                              class="card-text form-control fs-4 border-0" maxlength="25" placeholder="Нова папка" required></textarea>
+                </div>
+                               
+            </form>
+        </div>
+    </div>
+}
 
 <!-- Modals -->
 <div class="modal fade" id="newTaskModal" aria-hidden="true">

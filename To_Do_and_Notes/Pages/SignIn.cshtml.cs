@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using To_Do_and_Notes.Data;
 using To_Do_and_Notes.Models;
 using To_Do_and_Notes.Services;
@@ -21,17 +23,21 @@ namespace To_Do_and_Notes.Pages
         public void OnGet()
         {
 
+
         }
         public IActionResult OnPost()
         {
-            if (UserService.SignIn(User))
-            {
-                return RedirectToPage("Main");
+            int userId = UserService.SignIn(User); // get user id from db
+            if (userId == -1)
+            {            
+                ModelState.AddModelError("User.Email", "Неправильна пошта або пароль");
+                return Page();
+                
             }
             else
             {
-                ModelState.AddModelError("User.Email", "Неправильна пошта або пароль");
-                return Page();
+                HttpContext.Session.SetInt32("UserId", userId);
+                return RedirectToPage("Main");
             }
         }
     }

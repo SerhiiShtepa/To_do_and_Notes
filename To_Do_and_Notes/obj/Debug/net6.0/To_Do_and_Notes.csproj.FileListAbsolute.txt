@@ -83,3 +83,4 @@ C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\
 C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\System.Text.Json.dll
 C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes\bin\Debug\net6.0\Newtonsoft.Json.dll

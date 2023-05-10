@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using To_Do_and_Notes.Data;
 
@@ -11,9 +12,11 @@ using To_Do_and_Notes.Data;
 namespace To_Do_and_Notes.Migrations
 {
     [DbContext(typeof(ToDoAndNotesDbContext))]
-    partial class ToDoAndNotesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230509070219_AddedFolderName")]
+    partial class AddedFolderName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -2,6 +2,7 @@
 
 namespace To_Do_and_Notes.Models
 {
+    [Serializable]
     public class User
     {
         public int UserId { get; set; }
