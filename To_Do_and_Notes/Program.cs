@@ -1,16 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using To_Do_and_Notes.Data;
+using To_Do_and_Notes.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+#region Для Database
 builder.Services.AddDbContext<ToDoAndNotesDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+#endregion
 
-#region Session
+#region Для Session у звичайних Razor Page
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -20,10 +24,15 @@ builder.Services.AddSession(options =>
 });
 #endregion
 
+#region Для Razor Component
+builder.Services.AddHttpContextAccessor(); // для доступу до даних сесії
+builder.Services.AddServerSideBlazor();
+builder.Services.AddTransient<FolderService>();
+#endregion
 
 var app = builder.Build();
 
-#region Session
+#region Для Session у звичайних Razor Page
 app.UseSession();
 #endregion
 
@@ -46,6 +55,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.MapBlazorHub();
 
 app.MapRazorPages();
 

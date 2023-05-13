@@ -1,4 +1,6 @@
-﻿namespace To_Do_and_Notes.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace To_Do_and_Notes.Models
 {
     public class Folder
     {

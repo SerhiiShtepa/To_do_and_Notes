@@ -1,4 +1,5 @@
-﻿using To_Do_and_Notes.Data;
+﻿using Microsoft.AspNetCore.Hosting;
+using To_Do_and_Notes.Data;
 using To_Do_and_Notes.Models;
 
 namespace To_Do_and_Notes.Services
@@ -11,9 +12,13 @@ namespace To_Do_and_Notes.Services
         {
             _context = context;
         }
+        //public FolderService(ToDoAndNotesDbContext context)
+        //{
+        //    _context = context;
+        //}
         public bool CreateFolder(Folder newFolder, int? userId)
         {
-            if (newFolder == null || userId == null) { return false; }
+            if (newFolder == null || userId == null || newFolder?.Name == null) { return false; }
             newFolder.User = _context.Users.Where(u => u.UserId == userId).First();
             _context.Folders.Add(newFolder);
             _context.SaveChanges();
