@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Serhii\Documents\My_Projects\To_Do_and_Notes\To_Do_and_Notes
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/Serhii/Documents/My_Projects/To_Do_and_Notes/To_Do_and_Notes/Components/Main.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xNYWluLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Serhii/Documents/My_Projects/To_Do_and_Notes/To_Do_and_Notes/Pages/Bin.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmluLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

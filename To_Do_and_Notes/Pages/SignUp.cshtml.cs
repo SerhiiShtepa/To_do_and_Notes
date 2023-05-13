@@ -25,7 +25,7 @@ namespace To_Do_and_Notes.Pages
         }
         public IActionResult OnPost()
         {
-            int userId = UserService.SignUp(NewUser); // get user id from db
+            int? userId = UserService.SignUp(NewUser); // get user id from db
             if (userId == -1)
             {
                 ModelState.AddModelError("NewUser.Email", "Така пошта вже існує");
@@ -33,7 +33,7 @@ namespace To_Do_and_Notes.Pages
             }
             else
             {
-                HttpContext.Session.SetInt32("UserId", userId);
+                HttpContext.Session.SetInt32("UserId", Convert.ToInt32(userId));
                 return RedirectToPage("Main");
             }
         }

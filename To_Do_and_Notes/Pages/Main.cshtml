@@ -1,11 +1,13 @@
 ﻿@page
+@using To_Do_and_Notes.Models;
+@using Microsoft.AspNetCore.Components.Web;
 @model To_Do_and_Notes.Pages.MainModel
 @{
     Layout = "_Layout";
 }
 
 @section ButtonList
-{
+    {
     <div class="d-flex justify-content-start ps-2 pt-2">
         <button id="sidebarCollapse" class="btn btn-secondary align-self-baseline">
             <i class="bi bi-backspace"></i>
@@ -34,13 +36,17 @@
     {
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 }
-@section Scripts 
-{
+@section Scripts
+    {
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script src="~/js/summernote.js"></script>
+
+    <script>
+
+    </script>
 }
 @section NewFolder
-{
+    {
     <div class="ps-2 border-top border-bottom">
         <div class="btn btn-toggle d-inline-flex fs-4 w-100">
             <form method="post" asp-page-handler="CreateFolder">
@@ -49,13 +55,72 @@
                     <textarea asp-for="NewFolder.Name" oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
                               class="card-text form-control fs-4 border-0" maxlength="25" placeholder="Нова папка" required></textarea>
                 </div>
-                               
+
             </form>
         </div>
     </div>
 }
-
+@section FolderList
+    {
+    <div class="list-unstyled scrollable ps-2 pt-2" style="height: 60vh;">
+        @foreach (Folder folder in Model.Folders)
+        {
+            if (folder == null) { continue; }
+            <form method="post" asp-page-handler="SetRenameFolder" class="d-flex w-100 fs-4 align-items-center pb-0 pt-0">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-folder fs-2 me-2"></i>
+                    </button>
+                    <input asp-for="EditFolder.Name" class="p-0 fs-4 border-0" value="@folder.Name" />
+                    <input asp-for="EditFolder.FolderId" value="@folder.FolderId" hidden />
+                    <ul class="dropdown-menu">
+                        <li>
+                            <button type="submit" class="dropdown-item">Встановити edit folder</button>
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#folderEditModal">Перейменувати</button>
+                           @*<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#folderEditModal">Перейменувати</a>*@
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Видалити</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        }
+    </div>
+}
 <!-- Modals -->
+<div class="modal fade" id="folderEditModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-11 mt-3">
+                        <h5 class="modal-title text-center">Перейменування</h5>
+                    </div>
+                    <div class="col-1 mt-2">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" asp-page-handler="RenameFolder">
+                    <div class="card p-3 ps-4">
+                        <div class="row">
+                            <input asp-for="EditFolder.FolderId" value="@Model?.EditFolder?.FolderId" hidden />
+                            <textarea asp-for="EditFolder.Name" value="@Model?.EditFolder?.Name" oninput="auto_grow(this)" type="textarea"
+                                      class="card-text form-control fs-4 mt-1" maxlength="50"
+                                      required></textarea>
+                            <button type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="newTaskModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -336,6 +401,6 @@
     </div>
 </div>
 
+@{
 
-
-                             
+}

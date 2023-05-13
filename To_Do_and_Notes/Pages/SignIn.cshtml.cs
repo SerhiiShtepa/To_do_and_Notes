@@ -27,7 +27,7 @@ namespace To_Do_and_Notes.Pages
         }
         public IActionResult OnPost()
         {
-            int userId = UserService.SignIn(User); // get user id from db
+            int? userId = UserService.SignIn(User); // get user id from db
             if (userId == -1)
             {            
                 ModelState.AddModelError("User.Email", "Неправильна пошта або пароль");
@@ -36,7 +36,7 @@ namespace To_Do_and_Notes.Pages
             }
             else
             {
-                HttpContext.Session.SetInt32("UserId", userId);
+                HttpContext.Session.SetInt32("UserId", Convert.ToInt32(userId));
                 return RedirectToPage("Main");
             }
         }

@@ -5,7 +5,7 @@ namespace To_Do_and_Notes.Models
     [Serializable]
     public class User
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         [Required]
         [RegularExpression(@"[A-Za-zА-Яа-яІіЇїЄєҐґ']+([ A-Za-zА-Яа-яІіЇїЄєҐґ']+)*", ErrorMessage = "Вкажіть ім'я з 1-30 символів")]

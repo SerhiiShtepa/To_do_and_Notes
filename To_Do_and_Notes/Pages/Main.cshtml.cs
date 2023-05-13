@@ -13,6 +13,9 @@ namespace To_Do_and_Notes.Pages
         static public int? UserId { get; set; }
         [BindProperty]
         public Folder? NewFolder { get; set; }
+        [BindProperty]
+        public Folder? EditFolder { get; set; }
+        public List<Folder> Folders { get; set; }
 
         private readonly ToDoAndNotesDbContext _context;
         public FolderService FolderService { get; set; }
@@ -26,15 +29,36 @@ namespace To_Do_and_Notes.Pages
         {
             UserId = HttpContext.Session.GetInt32("UserId");
 
-            if (UserId == null)
+            if (UserId == null) { RedirectToPage("SignIn"); }
+            Folders = FolderService.GetAllFolders(UserId);
+            EditFolder = new Folder()
             {
-                RedirectToPage("SignIn");
-            }
+                Name = HttpContext.Session.GetString("EditFolderOldName"),
+                FolderId = HttpContext.Session.GetInt32("EditFolderId"),
+            };
         }
 
         public IActionResult OnPostCreateFolder()
         {
             if (FolderService.CreateFolder(NewFolder, UserId))
+            {
+                return RedirectToAction("Get");
+            }
+            else
+            {
+                return Page();
+            }
+        }
+        public IActionResult OnPostSetRenameFolder()
+        {
+            HttpContext.Session.SetInt32("EditFolderId", Convert.ToInt32(EditFolder.FolderId));
+            HttpContext.Session.SetString("EditFolderOldName", EditFolder.Name);
+            return RedirectToAction("Get");
+        }
+
+        public IActionResult OnPostRenameFolder()
+        {
+            if (FolderService.RenameFolder(EditFolder))
             {
                 return RedirectToAction("Get");
             }

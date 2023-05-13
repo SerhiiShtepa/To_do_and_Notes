@@ -11,7 +11,7 @@ namespace To_Do_and_Notes.Services
         {
             _context = context;
         }
-        public int SignIn(User user)
+        public int? SignIn(User user)
         {
             if (user == null)
             {
@@ -21,7 +21,7 @@ namespace To_Do_and_Notes.Services
             if (userFind == null) { return -1; }
             return userFind.Password == user.Password ? userFind.UserId : -1;
         }
-        public int SignUp(User newUser)
+        public int? SignUp(User newUser)
         {
             if (newUser == null) { return -1; }
             newUser.CreatedAt = DateTime.Now;
