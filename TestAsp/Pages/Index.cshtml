@@ -1,0 +1,19 @@
+﻿@page
+@using TestAsp.Components;
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/Main.js"></script>
+    <script type="text/javascript" src="~/js/sidebar.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @*<script src="@Url.Content("~/js/sidebar.js")"></script>*@
+    <script src="_framework/blazor.server.js"></script>
+}
+
+@(await Html.RenderComponentAsync<TestOne>(RenderMode.ServerPrerendered))

@@ -2,9 +2,12 @@
 @using Microsoft.AspNetCore.Components.Web
 @using To_Do_and_Notes.Models;
 @using To_Do_and_Notes.Services;
+@using Microsoft.JSInterop
+
 @inject IHttpContextAccessor HttpContextAccessor
 @inject NavigationManager NavigationManager
 @inject FolderService FolderService
+@inject IJSRuntime JSRuntime
 
 @code {
     private int? userId;
@@ -12,6 +15,13 @@
     public Folder selectedFolder = new Folder();
     public Folder newFolder = new Folder();
 
+    protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("ToggleTest");
+        }
+    }
     protected override void OnInitialized()
     {
         userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
