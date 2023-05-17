@@ -28,6 +28,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddHttpContextAccessor(); // для доступу до даних сесії
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<FolderService>();
+builder.Services.AddTransient<TaskService>();
 #endregion
 
 var app = builder.Build();

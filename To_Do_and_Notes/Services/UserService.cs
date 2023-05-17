@@ -1,4 +1,5 @@
-﻿using To_Do_and_Notes.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using To_Do_and_Notes.Data;
 using To_Do_and_Notes.Models;
 
 namespace To_Do_and_Notes.Services

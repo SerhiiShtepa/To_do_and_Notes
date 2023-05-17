@@ -7,6 +7,7 @@ namespace To_Do_and_Notes.Models
         public int? FolderId { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
         public User User { get; set; }
         public ICollection<Task> Tasks { get; set; }
         public ICollection<Note> Notes { get; set; }

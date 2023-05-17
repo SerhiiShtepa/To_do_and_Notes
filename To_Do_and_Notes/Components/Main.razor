@@ -7,13 +7,11 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @inject NavigationManager NavigationManager
 @inject FolderService FolderService
+@inject TaskService TaskService
 @inject IJSRuntime JSRuntime
 
 @code {
     private int? userId;
-    public int? selectedFolderId;
-    public Folder selectedFolder = new Folder();
-    public Folder newFolder = new Folder();
 
     protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
     {
@@ -26,30 +24,87 @@
     {
         userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
         if (userId == null) { RedirectToPage("/SignIn"); }
+        SetStartupFolder();
     }
     private void RedirectToPage(string pageName)
     {
         NavigationManager.NavigateTo(pageName);
     }
-    private void SelectFolder(int? selectedFolderId)
+
+    public Folder selectedFolder = new Folder();
+    public Folder newFolder = new Folder();
+    #region Folder things
+    private void SetStartupFolder()
     {
-        this.selectedFolderId = selectedFolderId;
-        selectedFolder = FolderService.GetAllFolders(userId).First(f => f.FolderId == selectedFolderId);
+        selectedFolder = FolderService.GetActiveFolderById(HttpContextAccessor.HttpContext.Session.GetInt32("SelectedFolder"));
+        if (selectedFolder == null)
+        {
+            selectedFolder = FolderService.GetAllActiveFolders(userId).FirstOrDefault();
+            if (selectedFolder == null)
+            {
+                selectedFolder = FolderService.CreateStartupFolder(userId);
+            }
+        }
     }
-    private void ChangeSelectedFolderName(string newName)
+    private void SelectFolder(Folder folder)
     {
-        selectedFolder.Name = newName;
+        selectedFolder = folder;
+        HttpContextAccessor.HttpContext.Session.SetInt32("SelectedFolder", Convert.ToInt32(selectedFolder.FolderId));
     }
     private void RenameFolder()
     {
         FolderService.RenameFolder(selectedFolder);
-        RedirectToPage("/Main");
+        RefreshPage();
     }
     private void CreateFolder()
     {
         FolderService.CreateFolder(newFolder, userId);
+        RefreshPage();
+    }
+    private void MarkFolderAsDeleted()
+    {
+        FolderService.MarkFolderAsDeleted(selectedFolder);
+        RefreshPage();
+    }
+    private void DeleteMarkedFolder()
+    {
+        FolderService.DeleteMarkedFolder(selectedFolder);
         RedirectToPage("/Main");
     }
+    #endregion
+
+    public Models.Task newTask = new Models.Task();
+    public Models.Task selectedTask = new Models.Task();
+    #region Task things
+    private void CreateTask()
+    {
+        TaskService.CreateTask(newTask, selectedFolder.FolderId);
+        RefreshPage();
+    }
+    private void ChangeCompleteState(Models.Task toChangeTask)
+    {
+        TaskService.ChangeCompleteState(toChangeTask);
+    }
+    private void MarkTaskAsDeleted(Models.Task taskToMark)
+    {
+        TaskService.MarkTaskAsDeleted(taskToMark);
+        RefreshPage();
+    }
+    private void SelectTask(Models.Task task)
+    {
+        selectedTask = task;
+    }
+    private void EditTask()
+    {
+        TaskService.EditTask(selectedTask);
+        RefreshPage();
+    }
+
+    void RefreshPage()
+    {
+        JSRuntime.InvokeVoidAsync("location.reload");
+    }
+    #endregion
 }
 
 <!-- sidebar -->
@@ -108,25 +163,27 @@
     </div>
     <!-- folder list -->
     <div class="list-unstyled scrollable ps-2 pt-2" style="height: 60vh;">
-        @foreach (Folder folder in FolderService.GetAllFolders(userId))
+        @foreach (Folder folder in FolderService.GetAllActiveFolders(userId))
         {
             if (folder == null) { continue; }
             <div class="d-flex w-100 fs-4 align-items-center pb-0 pt-0">
-                <button @onclick="(e => SelectFolder(folder.FolderId))" type="button" class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false">
+                <button @onclick="(e => SelectFolder(folder))" type="button" class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-folder fs-2 me-2"></i>
                 </button>
-                <div class="p-0 fs-4 border-0">@folder.Name</div>
-                <div class="p-0 fs-4 border-0" hidden>@folder.FolderId</div>
+                <button @onclick="(e => SelectFolder(folder))" class="btn w-100 d-flex justify-content-start p-0 me-2 fs-4 border-0">
+                    <div>@folder.Name</div>
+                </button>
                 <ul class="dropdown-menu">
                     <li>
                         <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#folderEditModal">Перейменувати</button>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">Видалити</a>
+                        <button @onclick="(e => MarkFolderAsDeleted())" type="button" class="dropdown-item">В кошик</button>
                     </li>
                 </ul>
             </div>
         }
+
     </div>
 </div>
 
@@ -153,7 +210,7 @@
                         <textarea @bind="selectedFolder.Name" oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
                                   class="card-text form-control fs-4 mt-1" maxlength="50"
                                   required></textarea>
-                        <button type="submit" @onclick="(e => RenameFolder())" class="btn btn-primary mt-1 w-100" data-bs-dismiss="modal">Ок</button>
+                        <button @onclick="(e => RenameFolder())" type="submit" class="btn btn-primary mt-1 w-100" data-bs-dismiss="modal">Ок</button>
                     </div>
                 </div>
             </div>
@@ -177,17 +234,17 @@
             </div>
 
             <div class="modal-body">
-                <form method="post">
+                <form>
                     <div class="card p-3 ps-4">
                         <div class="row">
                             <div class="fs-2 col-1 mt-1">
-                                <input class="form-check-input" type="checkbox" name="isCompletedNewTask">
+                                <input @bind="newTask.IsCompleted" class="form-check-input" type="checkbox">
                             </div>
                             <div class="col-11">
-                                <textarea oninput="auto_grow(this)" type="textarea"
+                                <textarea @bind="newTask.Title" oninput="auto_grow(this)" type="textarea"
                                           class="card-text form-control fs-4 mt-1" placeholder="Назва ..." maxlength="50"
                                           required></textarea>
-                                <textarea oninput="auto_grow(this)" type="textarea"
+                                <textarea @bind="newTask.Description" oninput="auto_grow(this)" type="textarea"
                                           class="card-text form-control fs-5 mt-1" placeholder="Опис ..."
                                           maxlength="200"></textarea>
                                 <div class="row g-1">
@@ -198,7 +255,7 @@
                                         </button>
                                     </div>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
+                                        <button @onclick="(e => CreateTask())" type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
                                     </div>
                                 </div>
                             </div>
@@ -249,7 +306,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="taskEditModal" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="taskEditModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -259,41 +316,41 @@
                         <h5 class="modal-title text-center">Редагування</h5>
                     </div>
                     <div class="col-1 mt-2">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити">
+                        <button @onclick="(e => RefreshPage())" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити">
                         </button>
                     </div>
                 </div>
             </div>
 
             <div class="modal-body">
-                <form method="post">
-                    <div class="card p-3 ps-4">
+                <div class="card p-3 ps-4">
+                    <form>
                         <div class="row">
                             <div class="fs-2 col-1 mt-1">
-                                <input class="form-check-input" type="checkbox" name="isCompletedEditTask">
+                                <input @bind="selectedTask.IsCompleted" class="form-check-input" type="checkbox">
                             </div>
                             <div class="col-11">
-                                <textarea oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
+                                <textarea @bind="selectedTask.Title" oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
                                           class="card-text form-control fs-4 mt-1" maxlength="50"
                                           required>task.Title</textarea>
-                                <textarea oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
+                                <textarea @bind="selectedTask.Description" oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
                                           class="card-text form-control fs-5 mt-1"
                                           maxlength="200">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, deserunt cum in itaque totam eaque laboriosam nisi enim rerum, soluta culpa labore deleniti consectetur obcaecati saepe quaerat molestiae praesentium eum?</textarea>
                                 <div class="row g-1">
                                     <div class="col">
-                                        <button type="button" class="btn btn-secondary mt-1 w-100"
+                                        <button @onclick="(e => RefreshPage())" type="button" class="btn btn-secondary mt-1 w-100"
                                                 data-bs-dismiss="modal">
                                             Скасувати
                                         </button>
                                     </div>
                                     <div class="col">
-                                        <button type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
+                                        <button @onclick="(e => EditTask())" type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -376,24 +433,28 @@
                 <div class="col-lg-6 d-lg-block d-none mt-2 border-end">
                     <div class="card-group scrollable">
                         <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
-                            <div class="card p-1 mt-2">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <input class="form-check-input fs-2 col-1" type="checkbox" name="isCompletedTask">
-                                        <div class="col-10">
-                                            <h5 class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
-                                                task.Title
-                                            </h5>
-                                            <p class="card-text">
-                                                Lorem ipsum dolor sit amet consectetur
-                                            </p>
-                                        </div>
-                                        <div class="col-1 row align-items-center">
-                                            <a href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                            @foreach (Models.Task task in TaskService.GetAllActiveTasks(selectedFolder.FolderId))
+                            {
+                                if (task == null) { continue; }
+                                <div class="card p-1 mt-2">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
+                                            <div class="col-10">
+                                                <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
+                                                    @task.Title
+                                                </h5>
+                                                <p class="card-text">
+                                                    @task.Description
+                                                </p>
+                                            </div>
+                                            <div class="col-1 row align-items-center">
+                                                <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
