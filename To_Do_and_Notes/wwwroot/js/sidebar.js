@@ -1,4 +1,4 @@
-function ToggleTest() {
+function ToggleButton() {
     var sidebarCollapse = document.getElementById('sidebarCollapse');
     sidebarCollapse.addEventListener('click', function () {
         document.getElementById('sidebar').classList.toggle('active');

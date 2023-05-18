@@ -8,6 +8,7 @@
 @inject NavigationManager NavigationManager
 @inject FolderService FolderService
 @inject TaskService TaskService
+@inject NoteService NoteService
 @inject IJSRuntime JSRuntime
 
 @code {
@@ -17,18 +18,35 @@
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("ToggleTest");
+            await JSRuntime.InvokeVoidAsync("ToggleButton");
+            await JSRuntime.InvokeVoidAsync("initializeSummernote", DotNetObjectReference.Create(this));
         }
     }
     protected override void OnInitialized()
     {
         userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
-        if (userId == null) { RedirectToPage("/SignIn"); }
+        if (userId == null || userId == -1) { RedirectToPage("/SignIn"); }
         SetStartupFolder();
     }
     private void RedirectToPage(string pageName)
     {
         NavigationManager.NavigateTo(pageName);
+    }
+    private void RefreshPage()
+    {
+        JSRuntime.InvokeVoidAsync("location.reload");
+    }
+    private void SignOut()
+    {
+        HttpContextAccessor.HttpContext.Session.SetInt32("UserId", -1);
+        HttpContextAccessor.HttpContext.Session.SetInt32("SelectedFolder", -1);
+        RedirectToPage("/SignIn");
+        RefreshPage();
+    }
+    private void RedirectToPersonInfo()
+    {
+        RedirectToPage("/PersonInfo");
+        RefreshPage();
     }
 
     public Folder selectedFolder = new Folder();
@@ -99,10 +117,36 @@
         TaskService.EditTask(selectedTask);
         RefreshPage();
     }
+    #endregion
 
-    void RefreshPage()
+    public Note newNote = new Note();
+    public Note selectedNote = new Note();
+    #region Note things
+    private void CreateNote()
     {
-        JSRuntime.InvokeVoidAsync("location.reload");
+        NoteService.CreateNote(newNote, selectedFolder.FolderId);
+        RefreshPage();
+    }
+    private void MarkNoteAsDeleted(Note noteToMark)
+    {
+        NoteService.MarkTaskAsDeleted(noteToMark);
+        RefreshPage();
+    }
+    private void SelectNote(Note note)
+    {
+        selectedNote = note;
+    }
+    private void EditNote()
+    {
+        NoteService.EditNote(selectedNote);
+        RefreshPage();
+    }
+
+    [JSInvokable]
+    public void SummerNoteChange(string content)
+    {
+        newNote.Content = content;
+        StateHasChanged(); // Manually trigger a component state update
     }
     #endregion
 }
@@ -127,12 +171,12 @@
             <div class="collapse fs-4 ms-3" id="profile-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li>
-                        <a href="#" class="link-dark d-inline-flex text-decoration-none rounded">
+                        <button @onclick="(e => RedirectToPersonInfo())" class="btn d-inline-flex fs-5">
                             Персональні
                             дані
-                        </a>
+                        </button>
                     </li>
-                    <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Вийти</a></li>
+                    <li><button @onclick="(e => SignOut())" href="" class="btn d-inline-flex fs-5">Вийти</button></li>
                 </ul>
             </div>
         </li>
@@ -183,7 +227,6 @@
                 </ul>
             </div>
         }
-
     </div>
 </div>
 
@@ -283,11 +326,11 @@
             </div>
 
             <div class="modal-body">
-                <form method="post">
+                <form>
                     <div class="card p-1">
-                        <textarea oninput="auto_grow(this)" type="textarea" class="card-text form-control fs-4 mt-1"
+                        <textarea @bind="newNote.Title" oninput="auto_grow(this)" type="textarea" class="card-text form-control fs-4 mt-1"
                                   placeholder="Назва ..." maxlength="50" required></textarea>
-                        <textarea name="" id="summernoteNew" cols="30" rows="10"></textarea>
+                        <textarea id="summernoteNew" cols="30" rows="10"></textarea>
 
                         <div class="row g-1">
                             <div class="col">
@@ -297,7 +340,7 @@
                                 </button>
                             </div>
                             <div class="col">
-                                <button type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
+                                <button @onclick="(e => CreateNote())" type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
                             </div>
                         </div>
                     </div>
@@ -461,22 +504,26 @@
                 <div class="col-lg-6 d-lg-block d-none mt-2">
                     <div class="card-group scrollable">
                         <div class="row row-cols-1 row-cols-2 g-2 mt-0 me-1" style="height: fit-content;">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <h5 class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
-                                                Card title
-                                            </h5>
-                                            <a href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                            @foreach (Note note in NoteService.GetAllActiveNotes(selectedFolder.FolderId))
+                            {
+                                if (note == null) { continue; }
+
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <h5 @onclick="(e => SelectNote(note))" class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
+                                                    @note.Title
+                                                </h5>
+                                                <a @onclick="(e => MarkNoteAsDeleted(note))" href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                            </div>
+                                            <p class="card-text">
+                                                @note.Content
+                                            </p>
                                         </div>
-                                        <p class="card-text">
-                                            This is a longer card with supporting text below as a
-                                            natural lead-in to additional content. This content is a little bit longer.
-                                        </p>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
