@@ -13,7 +13,7 @@
 @inject TaskService TaskService
 @inject NoteService NoteService
 @inject IJSRuntime JSRuntime
-@inject ToDoAndNotesDbContext DbContext
+@*@inject ToDoAndNotesDbContext DbContext*@
 
 @code {
     public enum ViewMode
@@ -180,16 +180,13 @@
     private async void SelectNote(Note note)
     {
         selectedNote = note;
-        temp = selectedNote.Content;
         await SetSummernoteEditContent();
     }
     private void EditNote()
     {
-        selectedNote.Content = temp;
-        RedirectToPage("/Controller");
+        RedirectToPage("/Controller"); // інакше 400
         RefreshPage();
-        //NoteService.EditNote(selectedNote);
-        DbContext.SaveChanges();
+        NoteService.EditNote(selectedNote);
     }
 
     [JSInvokable]
@@ -201,14 +198,13 @@
 
     public async System.Threading.Tasks.Task SetSummernoteEditContent()
     {
-        await JSRuntime.InvokeVoidAsync("setSummernoteEditContent", temp);
+        await JSRuntime.InvokeVoidAsync("setSummernoteEditContent", selectedNote.Content);
     }
-    public string temp = "";
     [JSInvokable]
     public void EditSummerNote(string content)
     {
-        temp = content;
-        DbContext.SaveChanges();
+        selectedNote.Content = content;
+        //DbContext.SaveChanges();
         //StateHasChanged();  //Manually trigger a component state update
     }
     #endregion
