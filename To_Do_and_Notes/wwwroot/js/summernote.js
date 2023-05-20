@@ -1,11 +1,13 @@
 window.initializeSummernote = function (dotNetReference) {
     $('#summernoteNew').summernote({
+        disableDragAndDrop: true,
+        disableResizeImage: true,
         placeholder: 'Hello stand alone ui',
         tabsize: 2,
         height: 120,
         toolbar: [
-            ['font', ['bold', 'underline']],
-            ['insert', ['picture']],
+            ['font', ['bold', 'italic', 'underline']],
+            ['insert'],
         ],
         callbacks: {
             onChange: function (content) {
@@ -14,12 +16,14 @@ window.initializeSummernote = function (dotNetReference) {
         }
     });
     $('#summernoteEdit').summernote({
+        disableDragAndDrop: true,
+        disableResizeImage: true,
         placeholder: 'Hello stand alone ui',
         tabsize: 2,
         height: 120,
         toolbar: [
-            ['font', ['bold', 'underline']],
-            ['insert', ['picture']],
+            ['font', ['bold', 'italic', 'underline']],
+            ['insert'],
         ],
         callbacks: {
             onChange: function (content) {

@@ -13,6 +13,7 @@
 @inject TaskService TaskService
 @inject NoteService NoteService
 @inject IJSRuntime JSRuntime
+@inject ToDoAndNotesDbContext DbContext
 
 @code {
     public enum ViewMode
@@ -187,9 +188,8 @@
         selectedNote.Content = temp;
         RedirectToPage("/Controller");
         RefreshPage();
-        NoteService.EditNote(selectedNote);
-        RedirectToPage("/Controller");
-        RefreshPage();
+        //NoteService.EditNote(selectedNote);
+        DbContext.SaveChanges();
     }
 
     [JSInvokable]
@@ -208,7 +208,8 @@
     public void EditSummerNote(string content)
     {
         temp = content;
-        StateHasChanged();  //Manually trigger a component state update
+        DbContext.SaveChanges();
+        //StateHasChanged();  //Manually trigger a component state update
     }
     #endregion
 }
@@ -536,15 +537,15 @@
             <!-- Default data view -->
             <div class="row">
                 <div class="col-lg-6 d-lg-block d-none mt-2 border-end">
-                    <div class="card-group scrollable">
-                        <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
+                    <div class="card-group scrollable pe-2">
+                        <div class="row row-cols-1 ms-0 w-100" style="height: fit-content;">
                             @if (viewMode == ViewMode.BYFOLDER)
                             {
                                 foreach (Models.Task task in TaskService.GetAllActiveTasks(selectedFolder.FolderId))
                                 {
                                     if (task == null) { continue; }
-                                    <div class="card p-1 mt-2">
-                                        <div class="container-fluid">
+                                    <div class="card mt-2 me-2">
+                                        <div class="container-fluid card-body p-2 ps-3">
                                             <div class="row">
                                                 <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
                                                 <div class="col-10">
@@ -555,7 +556,7 @@
                                                         @task.Description
                                                     </p>
                                                 </div>
-                                                <div class="col-1 row align-items-center">
+                                                <div class="col-1 row align-items-top mt-3">
                                                     <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                                 </div>
                                             </div>
@@ -568,8 +569,8 @@
                                 foreach (Models.Task task in TaskService.GetAllActiveTasks())
                                 {
                                     if (task == null) { continue; }
-                                    <div class="card p-1 mt-2">
-                                        <div class="container-fluid">
+                                    <div class="card mt-2 me-2">
+                                        <div class="container-fluid card-body p-2 ps-3">
                                             <div class="row">
                                                 <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
                                                 <div class="col-10">
@@ -580,7 +581,7 @@
                                                         @task.Description
                                                     </p>
                                                 </div>
-                                                <div class="col-1 row align-items-center">
+                                                <div class="col-1 row align-items-top mt-3">
                                                     <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                                 </div>
                                             </div>

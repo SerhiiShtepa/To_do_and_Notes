@@ -73,7 +73,12 @@
         TaskService.RestoreTask(taskToRestore);
         RefreshPage();
     }
-    
+    private void DeleteMarkedTask(Models.Task taskToDelete)
+    {
+        TaskService.DeleteMarkedTask(taskToDelete);
+        RefreshPage();
+    }
+
     public Note selectedNote = new Note();
     private void SelectNote(Note note)
     {
@@ -84,12 +89,11 @@
         NoteService.RestoreNote(noteToRestore);
         RefreshPage();
     }
-    //[JSInvokable]
-    //public void SummerNoteChange(string content)
-    //{
-    //    selectedNote.Content = content;
-    //    StateHasChanged(); // Manually trigger a component state update
-    //}
+    private void DeleteMarkedNote(Note noteToDelete)
+    {
+        NoteService.DeleteMarkedNote(noteToDelete);
+        RefreshPage();
+    }
 }
 
 <div class="vertical-nav bg-white" id="sidebar">
@@ -169,16 +173,16 @@
             <!-- Default data view -->
             <div class="row">
                 <div class="col-lg-6 d-lg-block d-none mt-2 border-end">
-                    <div class="card-group scrollable">
-                        <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
+                    <div class="card-group scrollable pe-2">
+                        <div class="row row-cols-1 ms-0 w-100" style="height: fit-content;">
                             @foreach (Models.Task task in TaskService.GetAllMarkedAsDeletedTasks())
                             {
                                 if (task == null) { continue; }
-                                <div class="card p-1 mt-2">
-                                    <div class="container-fluid">
+                                <div class="card mt-2 me-2">
+                                    <div class="container-fluid card-body p-2 ps-3">
                                         <div class="row">
                                             <input disabled @bind="task.IsCompleted" class="form-check-input fs-2 col-1" type="checkbox">
-                                            <div class="col-10">
+                                            <div class="col-9">
                                                 <h5 class="card-title mt-1">
                                                     @task.Title
                                                 </h5>
@@ -186,8 +190,9 @@
                                                     @task.Description
                                                 </p>
                                             </div>
-                                            <div class="col-1 row align-items-center">
-                                                <a @onclick="(e => RestoreTask(task))" href="" class="link-success"><i class="bi bi-arrow-up-circle fs-4"></i></a>
+                                            <div class="col-2 row align-items-top mt-3">
+                                                <a @onclick="(e => RestoreTask(task))" href="" class="col-6 link-success"><i class="bi bi-arrow-up-circle fs-4"></i></a>
+                                                <a @onclick="(e => DeleteMarkedTask(task))" href="" class="col-6 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -207,10 +212,13 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
-                                                <h5 @onclick="(e => SelectNote(note))" class="card-title col-9">
+                                                <h5 @onclick="(e => SelectNote(note))" class="card-title col-8">
                                                     @note.Title
                                                 </h5>
-                                                <a @onclick="(e => RestoreNote(note))" href="" class="col-3 link-success"><i class="bi bi-arrow-up-circle fs-4"></i></a>
+                                                <div class="col-4 row">
+                                                    <a @onclick="(e => RestoreNote(note))" href="" class="col-6 link-success p-0"><i class="bi bi-arrow-up-circle fs-4"></i></a>
+                                                    <a @onclick="(e => DeleteMarkedNote(note))" href="" class="col-6 link-danger p-0"><i class="bi bi-trash3 fs-4"></i></a>
+                                                </div>
                                             </div>
                                             <p class="card-text">
                                                 @note.Content
