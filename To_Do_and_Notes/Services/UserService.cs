@@ -6,7 +6,7 @@ namespace To_Do_and_Notes.Services
 {
     public class UserService
     {
-        private readonly ToDoAndNotesDbContext _context;
+        public ToDoAndNotesDbContext _context { get; set; }
 
         public UserService(ToDoAndNotesDbContext context)
         {

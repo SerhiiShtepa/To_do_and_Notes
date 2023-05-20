@@ -6,7 +6,8 @@ namespace To_Do_and_Notes.Services
 {
     public class FolderService
     {
-        private readonly ToDoAndNotesDbContext _context;
+        public ToDoAndNotesDbContext _context { get; set; }
+
 
         public FolderService(ToDoAndNotesDbContext context)
         {

@@ -34,8 +34,8 @@ namespace To_Do_and_Notes.Pages
             else
             {
                 HttpContext.Session.SetInt32("UserId", Convert.ToInt32(userId));
-                HttpContext.Session.SetString("PageToDisplay", PageToDisplay.MAIN.ToString());
-                return RedirectToPage("Main");
+                HttpContext.Session.SetString("ComponentToDisplay", ComponentToDisplay.MAIN.ToString());
+                return RedirectToPage("/Controller");
             }
         }
     }

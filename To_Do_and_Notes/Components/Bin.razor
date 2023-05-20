@@ -1,0 +1,275 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Components.Web
+@using To_Do_and_Notes.Models;
+@using To_Do_and_Notes.Services;
+@using Microsoft.JSInterop
+@using To_Do_and_Notes.Pages
+
+@inject IHttpContextAccessor HttpContextAccessor
+@inject NavigationManager NavigationManager
+@inject FolderService FolderService
+@inject TaskService TaskService
+@inject NoteService NoteService
+@inject IJSRuntime JSRuntime
+
+@code {
+    private int? userId;
+
+    protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("ToggleButton");
+            //await JSRuntime.InvokeVoidAsync("Test");
+        }
+    }
+    protected override void OnInitialized()
+    {
+        userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
+        if (userId == null || userId == -1) { RedirectToPage("/SignIn"); }
+        if (Enum.TryParse(HttpContextAccessor.HttpContext.Session.GetString("ComponentToDisplay"), out ComponentToDisplay componentToDisplay))
+        {
+            if (componentToDisplay != ComponentToDisplay.BIN)
+            {
+                RedirectToPage("/Controller");
+                RefreshPage();
+            }
+        }
+    }
+    private void RedirectToPage(string pageName)
+    {
+        NavigationManager.NavigateTo(pageName);
+    }
+    private void RefreshPage()
+    {
+        JSRuntime.InvokeVoidAsync("location.reload");
+    }
+    private void SignOut()
+    {
+        HttpContextAccessor.HttpContext.Session.SetInt32("UserId", -1);
+        HttpContextAccessor.HttpContext.Session.SetInt32("SelectedFolder", -1);
+        RedirectToPage("/SignIn");
+        RefreshPage();
+    }
+    private void RedirectToPersonInfo()
+    {
+        RedirectToPage("/PersonInfo");
+        RefreshPage();
+    }
+    private void RedirectToMain()
+    {
+        HttpContextAccessor.HttpContext.Session.SetString("ComponentToDisplay", ComponentToDisplay.MAIN.ToString());
+        RedirectToPage("/Controller");
+        RefreshPage();
+    }
+
+    public Models.Task selectedTask = new Models.Task();
+    private void SelectTask(Models.Task task)
+    {
+        selectedTask = task;
+    }
+    private void RestoreTask(Models.Task taskToRestore)
+    {
+        TaskService.RestoreTask(taskToRestore);
+        RefreshPage();
+    }
+    
+    public Note selectedNote = new Note();
+    private void SelectNote(Note note)
+    {
+        selectedNote = note;
+    }
+    private void RestoreNote(Note noteToRestore)
+    {
+        NoteService.RestoreNote(noteToRestore);
+        RefreshPage();
+    }
+    //[JSInvokable]
+    //public void SummerNoteChange(string content)
+    //{
+    //    selectedNote.Content = content;
+    //    StateHasChanged(); // Manually trigger a component state update
+    //}
+}
+
+<div class="vertical-nav bg-white" id="sidebar">
+    <div class="d-flex">
+        <a href="/" class="d-flex align-items-center mb-3 ms-1 link-dark text-decoration-none fs-1">
+            <i class="bi bi-journal-check me-2"></i>
+            <span class="fs-3 fw-semibold">TD&N</span>
+        </a>
+    </div>
+
+    <!-- static functionality -->
+    <ul class="list-unstyled ps-2 mb-0">
+        <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex collapsed fs-4" data-bs-toggle="collapse"
+                    data-bs-target="#profile-collapse" aria-expanded="false">
+                <i class="bi bi-person-circle fs-2 me-2"></i>
+                <div class="pt-2">Профіль</div>
+            </button>
+            <div class="collapse fs-4 ms-3" id="profile-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li>
+                        <button @onclick="(e => RedirectToPersonInfo())" class="btn d-inline-flex fs-5">
+                            Персональні
+                            дані
+                        </button>
+                    </li>
+                    <li><button @onclick="(e => SignOut())" href="" class="btn d-inline-flex fs-5">Вийти</button></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button @onclick="(e => RedirectToMain())" class="btn btn-toggle d-inline-flex fs-4">
+                <i class="bi bi-folder fs-2 me-2"></i>
+                <div class="pt-1">На головну</div>
+            </button>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex fs-4">
+                <i class="bi bi-trash3 fs-2 me-2"></i>
+                <div class="pt-1">Кошик</div>
+            </button>
+        </li>
+    </ul>
+</div>
+
+<!-- Main part of page -->
+<main role="main">
+
+    <div class="page-content" id="content">
+        <!-- Button list (за замовченням тільки backspace) -->
+        <div class="d-flex justify-content-start ps-2 pt-2">
+            <button id="sidebarCollapse" class="btn btn-secondary align-self-baseline">
+                <i class="bi bi-backspace"></i>
+            </button>
+            <div class="container mobileDataHide">
+                <div class="row">
+                    <div class="col-6">
+                        <button disabled class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                            +
+                            Задача
+                        </button>
+                        <input class="form-check-input fs-2" type="checkbox" id="tasksCheckbox" value="option2" checked>
+                    </div>
+                    <div class="col-6">
+                        <button disabled class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newNoteModal">
+                            +
+                            Нотатка
+                        </button>
+                        <input class="form-check-input fs-2" type="checkbox" id="notesCheckbox" value="option2" checked>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="container">
+            <!-- Default data view -->
+            <div class="row">
+                <div class="col-lg-6 d-lg-block d-none mt-2 border-end">
+                    <div class="card-group scrollable">
+                        <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
+                            @foreach (Models.Task task in TaskService.GetAllMarkedAsDeletedTasks())
+                            {
+                                if (task == null) { continue; }
+                                <div class="card p-1 mt-2">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <input disabled @bind="task.IsCompleted" class="form-check-input fs-2 col-1" type="checkbox">
+                                            <div class="col-10">
+                                                <h5 class="card-title mt-1">
+                                                    @task.Title
+                                                </h5>
+                                                <p class="card-text">
+                                                    @task.Description
+                                                </p>
+                                            </div>
+                                            <div class="col-1 row align-items-center">
+                                                <a @onclick="(e => RestoreTask(task))" href="" class="link-success"><i class="bi bi-arrow-up-circle fs-4"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-lg-block d-none mt-2">
+                    <div class="card-group scrollable">
+                        <div class="row row-cols-2 g-2 mt-0 me-1 w-100" style="height: fit-content;">
+                            @foreach (Note note in NoteService.GetAlMarkedAsDeletedNotes())
+                            {
+                                if (note == null) { continue; }
+
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <h5 @onclick="(e => SelectNote(note))" class="card-title col-9">
+                                                    @note.Title
+                                                </h5>
+                                                <a @onclick="(e => RestoreNote(note))" href="" class="col-3 link-success"><i class="bi bi-arrow-up-circle fs-4"></i></a>
+                                            </div>
+                                            <p class="card-text">
+                                                @note.Content
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile data view -->
+            <div class="row mobileDataHide">
+                <div class="col-12 d-lg-none scrollable">
+                    <div class="card-group">
+                        <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
+                            <div class="card p-1 mt-2">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <input class="form-check-input fs-2 col-1" type="checkbox" name="isCompletedTask">
+                                        <div class="col-10">
+                                            <h5 class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
+                                                task.Title
+                                            </h5>
+                                            <p class="card-text">
+                                                Lorem ipsum dolor sit amet consectetur
+                                            </p>
+                                        </div>
+                                        <div class="col-1 row align-items-center">
+                                            <a href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-group">
+                        <div class="row row-cols-1 row-cols-2 g-2 mt-0 me-1" style="height: fit-content;">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
+                                                Card title
+                                            </h5>
+                                            <a href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                        </div>
+                                        <p class="card-text">
+                                            This is a longer card with supporting text below as a
+                                            natural lead-in to additional content. This content is a little bit longer.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

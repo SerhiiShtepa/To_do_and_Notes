@@ -9,7 +9,7 @@ window.initializeSummernote = function (dotNetReference) {
         ],
         callbacks: {
             onChange: function (content) {
-                dotNetReference.invokeMethodAsync('SummerNoteChange', content);
+                dotNetReference.invokeMethodAsync('NewSummerNote', content);
             }
         }
     });
@@ -20,6 +20,16 @@ window.initializeSummernote = function (dotNetReference) {
         toolbar: [
             ['font', ['bold', 'underline']],
             ['insert', ['picture']],
-        ]
+        ],
+        callbacks: {
+            onChange: function (content) {
+                dotNetReference.invokeMethodAsync('EditSummerNote', content);
+            }
+        }
     });
+    
 };
+
+function setSummernoteEditContent(content) {
+    $('#summernoteEdit').summernote('code', content);
+}

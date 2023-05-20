@@ -1,8 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.EntityFrameworkCore;
+@using To_Do_and_Notes.Data;
 @using To_Do_and_Notes.Models;
 @using To_Do_and_Notes.Services;
 @using Microsoft.JSInterop
+@using To_Do_and_Notes.Pages
 
 @inject IHttpContextAccessor HttpContextAccessor
 @inject NavigationManager NavigationManager
@@ -12,7 +15,14 @@
 @inject IJSRuntime JSRuntime
 
 @code {
+    public enum ViewMode
+    {
+        ALL,
+        BYFOLDER
+    }
     private int? userId;
+    private ViewMode viewMode;
+    private bool isAddThingsDisabled;
 
     protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
     {
@@ -26,6 +36,18 @@
     {
         userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
         if (userId == null || userId == -1) { RedirectToPage("/SignIn"); }
+        if (Enum.TryParse(HttpContextAccessor.HttpContext.Session.GetString("ComponentToDisplay"), out ComponentToDisplay componentToDisplay))
+        {
+            if (componentToDisplay != ComponentToDisplay.MAIN)
+            {
+                RedirectToPage("/Controller");
+                RefreshPage();
+            }
+        }
+        if (Enum.TryParse(HttpContextAccessor.HttpContext.Session.GetString("ViewMode"), out ViewMode vm))
+        {
+            SetViewMode(vm);
+        }
         SetStartupFolder();
     }
     private void RedirectToPage(string pageName)
@@ -48,6 +70,27 @@
         RedirectToPage("/PersonInfo");
         RefreshPage();
     }
+    private void RedirectToBin()
+    {
+        HttpContextAccessor.HttpContext.Session.SetString("ComponentToDisplay", ComponentToDisplay.BIN.ToString());
+        RedirectToPage("/Controller");
+        RefreshPage();
+    }
+    private void SetViewMode(ViewMode viewMode)
+    {
+        this.viewMode = viewMode;
+        switch (viewMode)
+        {
+            case ViewMode.BYFOLDER:
+                isAddThingsDisabled = false;
+                HttpContextAccessor.HttpContext.Session.SetString("ViewMode", ViewMode.BYFOLDER.ToString());
+                break;
+            case ViewMode.ALL:
+                isAddThingsDisabled = true;
+                HttpContextAccessor.HttpContext.Session.SetString("ViewMode", ViewMode.ALL.ToString());
+                break;
+        }
+    }
 
     public Folder selectedFolder = new Folder();
     public Folder newFolder = new Folder();
@@ -66,6 +109,7 @@
     }
     private void SelectFolder(Folder folder)
     {
+        SetViewMode(ViewMode.BYFOLDER);
         selectedFolder = folder;
         HttpContextAccessor.HttpContext.Session.SetInt32("SelectedFolder", Convert.ToInt32(selectedFolder.FolderId));
     }
@@ -87,7 +131,7 @@
     private void DeleteMarkedFolder()
     {
         FolderService.DeleteMarkedFolder(selectedFolder);
-        RedirectToPage("/Main");
+        RedirectToPage("/Controller");
     }
     #endregion
 
@@ -132,21 +176,39 @@
         NoteService.MarkTaskAsDeleted(noteToMark);
         RefreshPage();
     }
-    private void SelectNote(Note note)
+    private async void SelectNote(Note note)
     {
         selectedNote = note;
+        temp = selectedNote.Content;
+        await SetSummernoteEditContent();
     }
     private void EditNote()
     {
+        selectedNote.Content = temp;
+        RedirectToPage("/Controller");
+        RefreshPage();
         NoteService.EditNote(selectedNote);
+        RedirectToPage("/Controller");
         RefreshPage();
     }
 
     [JSInvokable]
-    public void SummerNoteChange(string content)
+    public void NewSummerNote(string content)
     {
         newNote.Content = content;
         StateHasChanged(); // Manually trigger a component state update
+    }
+
+    public async System.Threading.Tasks.Task SetSummernoteEditContent()
+    {
+        await JSRuntime.InvokeVoidAsync("setSummernoteEditContent", temp);
+    }
+    public string temp = "";
+    [JSInvokable]
+    public void EditSummerNote(string content)
+    {
+        temp = content;
+        StateHasChanged();  //Manually trigger a component state update
     }
     #endregion
 }
@@ -183,11 +245,11 @@
         <li class="mb-1">
             <button class="btn btn-toggle d-inline-flex fs-4">
                 <i class="bi bi-folder fs-2 me-2"></i>
-                <div class="pt-1">Переглянути все</div>
+                <div @onclick='(e => SetViewMode(ViewMode.ALL))' class="pt-1">Переглянути все</div>
             </button>
         </li>
         <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex fs-4">
+            <button @onclick="(e=> RedirectToBin())" class="btn btn-toggle d-inline-flex fs-4">
                 <i class="bi bi-trash3 fs-2 me-2"></i>
                 <div class="pt-1">Кошик</div>
             </button>
@@ -231,7 +293,7 @@
 </div>
 
 <!-- Modals -->
-<div class="modal fade" id="folderEditModal">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="folderEditModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -398,7 +460,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="noteEditModal" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="noteEditModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -408,7 +470,7 @@
                         <h5 class="modal-title text-center">Редагування</h5>
                     </div>
                     <div class="col-1 mt-2">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити">
+                        <button @onclick="(e=>RefreshPage())" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрити">
                         </button>
                     </div>
                 </div>
@@ -417,20 +479,20 @@
             <div class="modal-body">
                 <form method="post">
                     <div class="card p-1">
-                        <textarea oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
+                        <textarea @bind="selectedNote.Title" oninput="auto_grow(this)" onfocus="auto_grow(this)" type="textarea"
                                   class="card-text form-control fs-4 mt-1" maxlength="50" required>note.Title</textarea>
 
-                        <textarea name="" id="summernoteEdit" cols="30" rows="10"></textarea>
+                        <textarea name="summernoteEdit" id="summernoteEdit" cols="30" rows="10"></textarea>
 
                         <div class="row g-1">
                             <div class="col">
-                                <button type="button" class="btn btn-secondary mt-1 w-100"
+                                <button @onclick="(e=>RefreshPage())" type="button" class="btn btn-secondary mt-1 w-100"
                                         data-bs-dismiss="modal">
                                     Скасувати
                                 </button>
                             </div>
                             <div class="col">
-                                <button type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
+                                <button @onclick="(e=> EditNote())" type="submit" class="btn btn-primary mt-1 w-100">Ок</button>
                             </div>
                         </div>
                     </div>
@@ -452,14 +514,14 @@
             <div class="container mobileDataHide">
                 <div class="row">
                     <div class="col-6">
-                        <button class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                        <button disabled="@isAddThingsDisabled" class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newTaskModal">
                             +
                             Задача
                         </button>
                         <input class="form-check-input fs-2" type="checkbox" id="tasksCheckbox" value="option2" checked>
                     </div>
                     <div class="col-6">
-                        <button class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newNoteModal">
+                        <button disabled="@isAddThingsDisabled" class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newNoteModal">
                             +
                             Нотатка
                         </button>
@@ -476,53 +538,107 @@
                 <div class="col-lg-6 d-lg-block d-none mt-2 border-end">
                     <div class="card-group scrollable">
                         <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
-                            @foreach (Models.Task task in TaskService.GetAllActiveTasks(selectedFolder.FolderId))
+                            @if (viewMode == ViewMode.BYFOLDER)
                             {
-                                if (task == null) { continue; }
-                                <div class="card p-1 mt-2">
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
-                                            <div class="col-10">
-                                                <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
-                                                    @task.Title
-                                                </h5>
-                                                <p class="card-text">
-                                                    @task.Description
-                                                </p>
-                                            </div>
-                                            <div class="col-1 row align-items-center">
-                                                <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                foreach (Models.Task task in TaskService.GetAllActiveTasks(selectedFolder.FolderId))
+                                {
+                                    if (task == null) { continue; }
+                                    <div class="card p-1 mt-2">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
+                                                <div class="col-10">
+                                                    <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
+                                                        @task.Title
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        @task.Description
+                                                    </p>
+                                                </div>
+                                                <div class="col-1 row align-items-center">
+                                                    <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
+                            }
+                            else if (viewMode == ViewMode.ALL)
+                            {
+                                foreach (Models.Task task in TaskService.GetAllActiveTasks())
+                                {
+                                    if (task == null) { continue; }
+                                    <div class="card p-1 mt-2">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
+                                                <div class="col-10">
+                                                    <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
+                                                        @task.Title
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        @task.Description
+                                                    </p>
+                                                </div>
+                                                <div class="col-1 row align-items-center">
+                                                    <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 d-lg-block d-none mt-2">
                     <div class="card-group scrollable">
-                        <div class="row row-cols-1 row-cols-2 g-2 mt-0 me-1" style="height: fit-content;">
-                            @foreach (Note note in NoteService.GetAllActiveNotes(selectedFolder.FolderId))
+                        <div class="row row-cols-2 g-2 mt-0 me-1 w-100" style="height: fit-content;">
+                            @if (viewMode == ViewMode.BYFOLDER)
                             {
-                                if (note == null) { continue; }
+                                foreach (Note note in NoteService.GetAllActiveNotes(selectedFolder.FolderId))
+                                {
+                                    if (note == null) { continue; }
 
-                                <div class="col">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <h5 @onclick="(e => SelectNote(note))" class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
-                                                    @note.Title
-                                                </h5>
-                                                <a @onclick="(e => MarkNoteAsDeleted(note))" href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <h5 @onclick="(e => SelectNote(note))" class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
+                                                        @note.Title
+                                                    </h5>
+                                                    <a @onclick="(e => MarkNoteAsDeleted(note))" href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                                </div>
+                                                <p class="card-text">
+                                                    @note.Content
+                                                </p>
                                             </div>
-                                            <p class="card-text">
-                                                @note.Content
-                                            </p>
                                         </div>
                                     </div>
-                                </div>
+                                }
+                            }
+                            else if (viewMode == ViewMode.ALL)
+                            {
+                                foreach (Note note in NoteService.GetAllActiveNotes())
+                                {
+                                    if (note == null) { continue; }
+
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <h5 @onclick="(e => SelectNote(note))" class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
+                                                        @note.Title
+                                                    </h5>
+                                                    <a @onclick="(e => MarkNoteAsDeleted(note))" href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                                </div>
+                                                <p class="card-text">
+                                                    @note.Content
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>

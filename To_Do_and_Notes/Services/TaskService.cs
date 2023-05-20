@@ -5,7 +5,7 @@ namespace To_Do_and_Notes.Services
 {
     public class TaskService
     {
-        private readonly ToDoAndNotesDbContext _context;
+        public ToDoAndNotesDbContext _context { get; set; }
 
         public TaskService(ToDoAndNotesDbContext context)
         {
@@ -29,10 +29,18 @@ namespace To_Do_and_Notes.Services
             if (folderId == null) { return null; }
             return _context.Tasks.Where(t => t.FolderId == folderId && t.IsDeleted == false).ToList();
         }
+        public List<Models.Task> GetAllActiveTasks()
+        {
+            return _context.Tasks.Where(t => t.IsDeleted == false).ToList();
+        }
         public List<Models.Task> GetAllMarkedAsDeletedTasks(int? folderId)
         {
             if (folderId == null) { return null; }
             return _context.Tasks.Where(t => t.FolderId == folderId && t.IsDeleted == true).ToList();
+        }
+        public List<Models.Task> GetAllMarkedAsDeletedTasks()
+        {
+            return _context.Tasks.Where(t => t.IsDeleted == true).ToList();
         }
         public bool EditTask(Models.Task editTask)
         {
@@ -55,6 +63,13 @@ namespace To_Do_and_Notes.Services
         {
             if (markedTask == null || markedTask.IsDeleted == false) { return false; }
             _context.Remove(_context.Tasks.Where(t => t.FolderId == markedTask.FolderId).First());
+            _context.SaveChanges();
+            return true;
+        }
+        public bool RestoreTask(Models.Task markedTask)
+        {
+            if (markedTask == null) { return false; }
+            _context.Tasks.Where(t => t.TaskId == markedTask.TaskId).First().IsDeleted = false;
             _context.SaveChanges();
             return true;
         }

@@ -1,12 +1,15 @@
-﻿using To_Do_and_Notes.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using To_Do_and_Notes.Data;
 using To_Do_and_Notes.Models;
 
 namespace To_Do_and_Notes.Services
 {
     public class NoteService
     {
-        private readonly ToDoAndNotesDbContext _context;
-        
+        public ToDoAndNotesDbContext _context { get; set; }
+
         public NoteService(ToDoAndNotesDbContext context)
         {
             _context = context;
@@ -23,12 +26,20 @@ namespace To_Do_and_Notes.Services
         public List<Note> GetAllActiveNotes(int? folderId)
         {
             if (folderId == null) { return null; }
-            return _context.Notes.Where(n => n.FolderId == folderId && n.IsDeleted == false).ToList();
+            return _context.Notes.Where(n => n.FolderId == folderId && n.IsDeleted == false).Include(f => f.Folder).ToList();
+        }
+        public List<Note> GetAllActiveNotes()
+        {
+            return _context.Notes.Where(n => n.IsDeleted == false).Include(f => f.Folder).ToList();
         }
         public List<Note> GetAlMarkedAsDeletedNotes(int? folderId)
         {
             if (folderId == null) { return null; }
             return _context.Notes.Where(n => n.FolderId == folderId && n.IsDeleted == true).ToList();
+        }
+        public List<Note> GetAlMarkedAsDeletedNotes()
+        {
+            return _context.Notes.Where(n => n.IsDeleted == true).ToList();
         }
         public bool EditNote(Note editNote)
         {
@@ -50,6 +61,13 @@ namespace To_Do_and_Notes.Services
         {
             if (markedNote == null || markedNote.IsDeleted == false) { return false; }
             _context.Remove(_context.Notes.Where(n => n.NoteId == markedNote.NoteId).First());
+            _context.SaveChanges();
+            return true;
+        }
+        public bool RestoreNote(Note markedNote)
+        {
+            if (markedNote == null) { return false; }
+            _context.Notes.Where(n => n.NoteId == markedNote.NoteId).First().IsDeleted = false;
             _context.SaveChanges();
             return true;
         }

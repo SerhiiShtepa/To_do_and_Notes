@@ -1,0 +1,21 @@
+﻿@page
+@using To_Do_and_Notes.Models;
+@using Microsoft.AspNetCore.Components.Web;
+@using To_Do_and_Notes.Components;
+@model To_Do_and_Notes.Pages.ControllerModel
+@{
+    Layout = "_Layout";
+}
+
+@switch (Model.PageToDisplay)
+{
+    case ComponentToDisplay.MAIN:
+        @(await Html.RenderComponentAsync<Main>(RenderMode.ServerPrerendered))
+        break;
+    case ComponentToDisplay.BIN:
+        @(await Html.RenderComponentAsync<Bin>(RenderMode.ServerPrerendered))
+        break;
+    case ComponentToDisplay.PERSONALINFO:
+        @(await Html.RenderComponentAsync<Main>(RenderMode.ServerPrerendered))
+        break;
+}
