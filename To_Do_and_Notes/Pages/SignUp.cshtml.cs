@@ -34,6 +34,7 @@ namespace To_Do_and_Notes.Pages
             else
             {
                 HttpContext.Session.SetInt32("UserId", Convert.ToInt32(userId));
+                HttpContext.Session.SetInt32("SelectedFolder", -1);
                 HttpContext.Session.SetString("ComponentToDisplay", ComponentToDisplay.MAIN.ToString());
                 return RedirectToPage("/Controller");
             }

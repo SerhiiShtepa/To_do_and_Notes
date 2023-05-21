@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using To_Do_and_Notes.Data;
 using To_Do_and_Notes.Models;
 
@@ -54,13 +55,23 @@ namespace To_Do_and_Notes.Services
             {
                 task.IsDeleted = true;
             }
+            foreach (Note note in _context.Notes.Where(n => n.FolderId == folderToMark.FolderId).ToList())
+            {
+                note.IsDeleted = true;
+            }
             _context.SaveChanges();
             return true;
         }
-        public bool DeleteMarkedFolder(Folder markedFolder)
+        public bool TryToDeleteMarkedFolders()
         {
-            if (markedFolder == null || markedFolder.IsDeleted == false) { return false; }
-            _context.Remove(_context.Folders.Where(f => f.FolderId == markedFolder.FolderId).First());        
+            List<Folder> folders =  _context.Folders.Where(f => f.IsDeleted == true).Include(f => f.Tasks).Include(f => f.Notes).ToList();
+            foreach (var folder in folders)
+            {
+                if (folder.Tasks.Count == 0 && folder.Notes.Count == 0)
+                {
+                    _context.Remove(folder);
+                }
+            }
             _context.SaveChanges();
             return true;
         }

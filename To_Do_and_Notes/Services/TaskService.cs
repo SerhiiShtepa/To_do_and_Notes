@@ -70,6 +70,7 @@ namespace To_Do_and_Notes.Services
         {
             if (markedTask == null) { return false; }
             _context.Tasks.Where(t => t.TaskId == markedTask.TaskId).First().IsDeleted = false;
+            _context.Folders.Where(f => f.FolderId == markedTask.FolderId).First().IsDeleted = false;
             _context.SaveChanges();
             return true;
         }
