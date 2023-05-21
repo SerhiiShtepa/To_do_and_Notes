@@ -45,10 +45,19 @@ namespace To_Do_and_Notes.Services
             }
         }
 
-        public User GetUserById(int userId)
+        public User GetUserById(int? userId)
         {
             User user = _context?.Users?.Where(u => u.UserId == userId)?.FirstOrDefault();
             return user ?? null;
+        }
+        public bool EditUser(User editUser, int? userId)
+        {
+            User user = _context.Users.Where(u => u.UserId == userId).First();
+            user.Name = editUser.Name;
+            user.Email = editUser.Email;
+            user.Password = editUser.Password;
+            _context.SaveChanges();
+            return true;
         }
     }
 }

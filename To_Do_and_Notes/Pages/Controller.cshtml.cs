@@ -12,7 +12,7 @@ namespace To_Do_and_Notes.Pages
     {
         MAIN,
         BIN,
-        PERSONALINFO
+        PERSONINFO
     }
     public class ControllerModel : PageModel
     {

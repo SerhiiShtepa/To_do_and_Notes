@@ -32,6 +32,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<FolderService>();
 builder.Services.AddTransient<TaskService>();
 builder.Services.AddTransient<NoteService>();
+builder.Services.AddTransient<UserService>();
 #endregion
 
 var app = builder.Build();
@@ -48,10 +49,20 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseDefaultFiles(new DefaultFilesOptions()
-{
-    DefaultFileNames = new[] {"index.html"}
-});
+//app.UseDefaultFiles(new DefaultFilesOptions()
+//{
+//    DefaultFileNames = new[] { "signin.html" }
+//});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapRazorPages();
+//    endpoints.MapDefaultControllerRoute();
+//    endpoints.MapFallbackToPage("/SignIn");
+//});
+//builder.Services.AddMvc().AddRazorPagesOptions(options =>
+//{
+//    options.Conventions.AddPageRoute("/SignIn", "");
+//});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
