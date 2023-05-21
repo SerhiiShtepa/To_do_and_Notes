@@ -21,7 +21,7 @@ namespace To_Do_and_Notes.Pages
         public void OnGet()
         {
             int? userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null || userId == -1) { RedirectToPage("/SignIn"); }
+            if (userId == null || userId == -1) { RedirectToPage("/Index"); }
             NewUser = UserService.GetUserById(userId);
         }
         public IActionResult OnPost()
@@ -30,7 +30,7 @@ namespace To_Do_and_Notes.Pages
             string email = _context.Users.Where(u => u.UserId == userId).First().Email;
             NewUser.Email = email;
             UserService.EditUser(NewUser, userId);
-            return RedirectToPage("SignIn");
+            return RedirectToPage("Index");
         }
     }
 }

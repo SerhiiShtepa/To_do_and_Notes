@@ -36,7 +36,7 @@
     protected override void OnInitialized()
     {
         userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
-        if (userId == null || userId == -1) { RedirectToPage("/SignIn"); }
+        if (userId == null || userId == -1) { RedirectToPage("/Index"); }
         if (Enum.TryParse(HttpContextAccessor.HttpContext.Session.GetString("ComponentToDisplay"), out ComponentToDisplay componentToDisplay))
         {
             if (componentToDisplay != ComponentToDisplay.MAIN)
@@ -64,7 +64,7 @@
     {
         HttpContextAccessor.HttpContext.Session.SetInt32("UserId", -1);
         HttpContextAccessor.HttpContext.Session.SetInt32("SelectedFolder", -1);
-        RedirectToPage("/SignIn");
+        RedirectToPage("/Index");
         RefreshPage();
     }
     private void RedirectToPersonInfo()
@@ -267,7 +267,14 @@
             if (folder == null) { continue; }
             <div class="d-flex w-100 fs-4 align-items-center pb-0 pt-0">
                 <button @onclick="(e => SelectFolder(folder))" type="button" class="btn p-0" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-folder fs-2 me-2"></i>
+                    @if (selectedFolder.FolderId == folder.FolderId)
+                    {
+                        <i class="bi bi-folder-fill fs-2 me-2"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-folder fs-2 me-2"></i>
+                    }
                 </button>
                 <button @onclick="(e => SelectFolder(folder))" class="btn w-100 d-flex justify-content-start p-0 me-2 fs-4 border-0">
                     <div>@folder.Name</div>
@@ -499,7 +506,7 @@
 <main role="main">
 
     <div class="page-content" id="content">
-        <!-- Button list (за замовченням тільки backspace) -->
+        <!-- Button list -->
         <div class="d-flex justify-content-start ps-2 pt-2">
             <button id="sidebarCollapse" class="btn btn-secondary align-self-baseline">
                 <i class="bi bi-backspace"></i>
@@ -511,24 +518,24 @@
                             +
                             Задача
                         </button>
-                        <input class="form-check-input fs-2" type="checkbox" id="tasksCheckbox" value="option2" checked>
+                        @*<input class="form-check-input fs-2" type="checkbox" id="tasksCheckbox" value="option2" checked>*@
                     </div>
                     <div class="col-6">
                         <button disabled="@isAddThingsDisabled" class="btn btn-primary fs-5" data-bs-toggle="modal" data-bs-target="#newNoteModal">
                             +
                             Нотатка
                         </button>
-                        <input class="form-check-input fs-2" type="checkbox" id="notesCheckbox" value="option2" checked>
+                        @*<input class="form-check-input fs-2" type="checkbox" id="notesCheckbox" value="option2" checked>*@
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Content -->
-        <div class="container">
+        <div class="container mobileDataHide">
             <!-- Default data view -->
             <div class="row">
-                <div class="col-lg-6 d-lg-block d-none mt-2 border-end">
+                <div class="col-lg-6  mt-2 border-end">
                     <div class="card-group scrollable pe-2">
                         <div class="row row-cols-1 ms-0 w-100" style="height: fit-content;">
                             @if (viewMode == ViewMode.BYFOLDER)
@@ -537,10 +544,10 @@
                                 {
                                     if (task == null) { continue; }
                                     <div class="card mt-2 me-2">
-                                        <div class="container-fluid card-body p-2 ps-3">
+                                        <div class="container-fluid card-body ps-3">
                                             <div class="row">
                                                 <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
-                                                <div class="col-10">
+                                                <div class="col-9">
                                                     <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
                                                         @task.Title
                                                     </h5>
@@ -548,7 +555,7 @@
                                                         @task.Description
                                                     </p>
                                                 </div>
-                                                <div class="col-1 row align-items-top mt-3">
+                                                <div class="col-2 row align-items-top mt-3">
                                                     <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                                 </div>
                                             </div>
@@ -562,10 +569,10 @@
                                 {
                                     if (task == null) { continue; }
                                     <div class="card mt-2 me-2">
-                                        <div class="container-fluid card-body p-2 ps-3">
+                                        <div class="container-fluid card-body ps-3">
                                             <div class="row">
                                                 <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
-                                                <div class="col-10">
+                                                <div class="col-9">
                                                     <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
                                                         @task.Title
                                                     </h5>
@@ -573,7 +580,7 @@
                                                         @task.Description
                                                     </p>
                                                 </div>
-                                                <div class="col-1 row align-items-top mt-3">
+                                                <div class="col-2 row align-items-top mt-3">
                                                     <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                                 </div>
                                             </div>
@@ -584,7 +591,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 d-lg-block d-none mt-2">
+                <div class="col-lg-6  mt-2">
                     <div class="card-group scrollable">
                         <div class="row row-cols-2 g-2 mt-0 me-1 w-100" style="height: fit-content;">
                             @if (viewMode == ViewMode.BYFOLDER)
@@ -638,52 +645,101 @@
                 </div>
             </div>
             <!-- Mobile data view -->
-            <div class="row mobileDataHide">
-                <div class="col-12 d-lg-none scrollable">
-                    <div class="card-group">
-                        <div class="row row-cols-1 ms-0 me-2 w-100" style="height: fit-content;">
-                            <div class="card p-1 mt-2">
-                                <div class="container-fluid">
+            @*<div class="row mobileDataHide">
+                <div class="col-12 d-lg-none scrollable card-group">
+                    @if (viewMode == ViewMode.BYFOLDER)
+                    {
+                        foreach (Models.Task task in TaskService.GetAllActiveTasks(selectedFolder.FolderId))
+                        {
+                            if (task == null) { continue; }
+                            <div class="card mt-2 me-2">
+                                <div class="container-fluid card-body p-2 ps-3">
                                     <div class="row">
-                                        <input class="form-check-input fs-2 col-1" type="checkbox" name="isCompletedTask">
+                                        <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
                                         <div class="col-10">
-                                            <h5 class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
-                                                task.Title
+                                            <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
+                                                @task.Title
                                             </h5>
                                             <p class="card-text">
-                                                Lorem ipsum dolor sit amet consectetur
+                                                @task.Description
                                             </p>
                                         </div>
-                                        <div class="col-1 row align-items-center">
-                                            <a href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                        <div class="col-1 row align-items-top mt-3">
+                                            <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card-group">
-                        <div class="row row-cols-1 row-cols-2 g-2 mt-0 me-1" style="height: fit-content;">
+                        }
+                        foreach (Note note in NoteService.GetAllActiveNotes(selectedFolder.FolderId))
+                        {
+                            if (note == null) { continue; }
+
                             <div class="col">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            <h5 class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
-                                                Card title
+                                            <h5 @onclick="(e => SelectNote(note))" class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
+                                                @note.Title
                                             </h5>
-                                            <a href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                            <a @onclick="(e => MarkNoteAsDeleted(note))" href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
                                         </div>
                                         <p class="card-text">
-                                            This is a longer card with supporting text below as a
-                                            natural lead-in to additional content. This content is a little bit longer.
+                                            @note.Content
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        }
+
+                    }
+                    else if (viewMode == ViewMode.ALL)
+                    {
+                        foreach (Models.Task task in TaskService.GetAllActiveTasks())
+                        {
+                            if (task == null) { continue; }
+                            <div class="card mt-2 me-2">
+                                <div class="container-fluid card-body p-2 ps-3">
+                                    <div class="row">
+                                        <input @bind="task.IsCompleted" @oninput="(e => ChangeCompleteState(task))" class="form-check-input fs-2 col-1" type="checkbox">
+                                        <div class="col-10">
+                                            <h5 @onclick="(e => SelectTask(task))" class="card-title mt-1" data-bs-toggle="modal" data-bs-target="#taskEditModal">
+                                                @task.Title
+                                            </h5>
+                                            <p class="card-text">
+                                                @task.Description
+                                            </p>
+                                        </div>
+                                        <div class="col-1 row align-items-top mt-3">
+                                            <a @onclick="(e => MarkTaskAsDeleted(task))" href="" class="link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        foreach (Note note in NoteService.GetAllActiveNotes())
+                        {
+                            if (note == null) { continue; }
+
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 @onclick="(e => SelectNote(note))" class="card-title col-9" data-bs-toggle="modal" data-bs-target="#noteEditModal">
+                                                @note.Title
+                                            </h5>
+                                            <a @onclick="(e => MarkNoteAsDeleted(note))" href="" class="col-3 link-danger"><i class="bi bi-trash3 fs-4"></i></a>
+                                        </div>
+                                        <p class="card-text">
+                                            @note.Content
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
-            </div>
+            </div>*@
         </div>
 
     </div>

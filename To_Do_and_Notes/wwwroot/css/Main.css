@@ -7,7 +7,7 @@ body {
 }
 
 .scrollable {
-   height: 85vh;
+   /*height: 85vh;*/
    width: 100%;
    overflow-y: scroll;
    overflow-x: hidden;
