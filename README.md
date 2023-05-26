@@ -16,6 +16,8 @@
   <li>видалення назавжди задач та нотаток.</li>
 </ul>
 
+<div>ASP.NET Core, Razor Pages, Blazor і Entity Framework Core - це потужні інструменти для розробки веб-додатків на платформі .NET. Вони надають широкі можливості для створення функціональних та ефективних веб-додатків з використанням серверного та клієнтського коду.</div><br>
+<div>
 Реєстрація (ПК).png
 Вхід (ПК).png
 Головна (ПК).png
@@ -29,6 +31,7 @@
 Головна (Телефон).png
 Редагування нотатки (Телефон).png
 Кошик (Телефон).png
+</div>
 
 ![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%A0%D0%B5%D1%94%D1%81%D1%82%D1%80%D0%B0%D1%86%D1%96%D1%8F%20(%D0%9F%D0%9A).png)
 ![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%92%D1%85%D1%96%D0%B4%20(%D0%9F%D0%9A).png)
