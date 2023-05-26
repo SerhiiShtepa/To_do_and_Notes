@@ -26,7 +26,6 @@ namespace To_Do_and_Notes.Services
         {
             if (newUser == null) { return -1; }
             newUser.CreatedAt = DateTime.Now;
-            newUser.ViewMode = ViewMode.TasksNotes;
 
             if (UserExists(newUser) == false)
             {

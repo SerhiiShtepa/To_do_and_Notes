@@ -11,8 +11,7 @@ namespace To_Do_and_Notes.Pages
     public enum ComponentToDisplay
     {
         MAIN,
-        BIN,
-        PERSONINFO
+        BIN
     }
     public class ControllerModel : PageModel
     {

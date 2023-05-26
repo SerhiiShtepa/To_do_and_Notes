@@ -137,9 +137,6 @@ namespace To_Do_and_Notes.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("ViewMode")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");

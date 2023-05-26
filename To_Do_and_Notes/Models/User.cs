@@ -21,13 +21,6 @@ namespace To_Do_and_Notes.Models
         public string Password { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public ViewMode ViewMode { get; set; }
         public ICollection<Folder> Folders { get; set; }
-    }
-    public enum ViewMode
-    {
-        Tasks,
-        Notes,
-        TasksNotes
     }
 }
