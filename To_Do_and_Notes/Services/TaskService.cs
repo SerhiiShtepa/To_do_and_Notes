@@ -1,4 +1,5 @@
-﻿using To_Do_and_Notes.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using To_Do_and_Notes.Data;
 using To_Do_and_Notes.Models;
 
 namespace To_Do_and_Notes.Services
@@ -33,14 +34,16 @@ namespace To_Do_and_Notes.Services
         {
             return _context.Tasks.Where(t => t.IsDeleted == false).ToList();
         }
-        public List<Models.Task> GetAllMarkedAsDeletedTasks(int? folderId)
+        public List<Models.Task> GetAllMarkedAsDeletedTasksByFolder(int? folderId)
         {
             if (folderId == null) { return null; }
             return _context.Tasks.Where(t => t.FolderId == folderId && t.IsDeleted == true).ToList();
         }
-        public List<Models.Task> GetAllMarkedAsDeletedTasks()
+        public List<Models.Task> GetAllMarkedAsDeletedTasks(int? userId)
         {
-            return _context.Tasks.Where(t => t.IsDeleted == true).ToList();
+            if (userId == null) { return null; }
+            var info =  _context.Tasks.Include(t => t.Folder).ThenInclude(f => f.User).Where(t => t.Folder.UserId == userId && t.IsDeleted == true);
+            return info.ToList();
         }
         public bool EditTask(Models.Task editTask)
         {

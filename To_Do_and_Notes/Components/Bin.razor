@@ -177,7 +177,7 @@
                 <div class="col-lg-6 mt-2 border-end">
                     <div class="card-group scrollable pe-2">
                         <div class="row row-cols-1 ms-0 w-100" style="height: fit-content;">
-                            @foreach (Models.Task task in TaskService.GetAllMarkedAsDeletedTasks())
+                            @foreach (Models.Task task in TaskService.GetAllMarkedAsDeletedTasks(userId))
                             {
                                 if (task == null) { continue; }
                                 <div class="card mt-2">
@@ -206,7 +206,7 @@
                 <div class="col-lg-6 mt-2">
                     <div class="card-group scrollable">
                         <div class="row row-cols-2 g-2 mt-0 me-1 w-100" style="height: fit-content;">
-                            @foreach (Note note in NoteService.GetAlMarkedAsDeletedNotes())
+                            @foreach (Note note in NoteService.GetAlMarkedAsDeletedNotes(userId))
                             {
                                 if (note == null) { continue; }
 

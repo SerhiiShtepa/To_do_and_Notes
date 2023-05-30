@@ -32,14 +32,16 @@ namespace To_Do_and_Notes.Services
         {
             return _context.Notes.Where(n => n.IsDeleted == false).Include(f => f.Folder).ToList();
         }
-        public List<Note> GetAlMarkedAsDeletedNotes(int? folderId)
+        public List<Note> GetAlMarkedAsDeletedNotesByFolder(int? folderId)
         {
             if (folderId == null) { return null; }
             return _context.Notes.Where(n => n.FolderId == folderId && n.IsDeleted == true).ToList();
         }
-        public List<Note> GetAlMarkedAsDeletedNotes()
+        public List<Note> GetAlMarkedAsDeletedNotes(int? userId)
         {
-            return _context.Notes.Where(n => n.IsDeleted == true).ToList();
+            if (userId == null) { return null; }
+            var info = _context.Notes.Include(n => n.Folder).ThenInclude(f => f.User).Where(n => n.Folder.UserId == userId && n.IsDeleted == true);
+            return info.ToList();
         }
         public bool EditNote(Note editNote)
         {
