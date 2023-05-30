@@ -1,28 +1,33 @@
 # To-do-and-Notes
 
 <h2>Курсовий проект з дисципліни КПЗ</h2>
-<h3>Об'єкт дослідження  –  конструювання клієнт-сервер архітектури на прикладі вебзастосунку.</h3>
-<h3>Мета роботи  –   розробка вебзастосунку для управління задачами та нотатками.</h3>
-<h3>Результатом роботи став вебзастосунок що має наступні основні функції для користувачів:</h3>
-<ul>
-  <li>створення та збереження задач;</li>
-  <li>редагування та видалення створених задач;</li>
-  <li>відмічення задачі як виконаної або не виконаної;</li>
-  <li>створення та збереження нотаток;</li>
-  <li>редагування та видалення створених нотаток;</li>
-  <li>створення та збереження папок для задач;</li>
-  <li>редагування та видалення створених папок;</li>
-  <li>відновлення видалених задач та нотаток;</li>
-  <li>видалення назавжди задач та нотаток.</li>
-</ul>
 
-![Реєстрація (ПК)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/0fe3ed80-08fa-4486-8b04-f2edd7117854)
-![Вхід (ПК)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/bef6b5f6-3931-4c55-bc13-2d49f7960cb6)
-![Головна (ПК)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/b1abdc9b-a53f-441f-b9a8-a490468ad690)
-![Редагування нотатки (ПК)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/b5785b84-aac3-4412-b7fc-f1efefd6d5d8)
-![Редагування задачі (ПК)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/8909fc01-dbfa-4131-9c35-bf2fb695b70d)
-![Головна2 (Телефон)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/06f66cb0-4506-44aa-9476-e6a962672bb9)
-![Головна (Телефон)](https://github.com/SerhiiShtepa/To_do_and_Notes/assets/111882413/7f67b7af-635b-4bce-b1e3-fe52fefbed3a)
+**Об'єкт дослідження**  –  конструювання клієнт-сервер архітектури на прикладі вебзастосунку.<br>
+**Мета роботи**  –   розробка вебзастосунку для управління задачами та нотатками.<br>
+**Результатом роботи став** вебзастосунок що має наступні основні функції для користувачів:
+- створення та збереження задач;
+- редагування та видалення створених задач;
+- відмічення задачі як виконаної або не виконаної;
+- створення та збереження нотаток;
+- редагування та видалення створених нотаток;
+- створення та збереження папок для задач;
+- редагування та видалення створених папок;
+- відновлення видалених задач та нотаток;
+- видалення назавжди задач та нотаток.
 
 
+**ASP.NET Core, Razor Pages, Blazor та Entity Framework Core** - це потужні інструменти для розробки веб-додатків на платформі .NET. Вони надають широкі можливості для створення функціональних та ефективних веб-додатків з використанням серверного та клієнтського коду.<br>
 
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%A0%D0%B5%D1%94%D1%81%D1%82%D1%80%D0%B0%D1%86%D1%96%D1%8F%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%92%D1%85%D1%96%D0%B4%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%93%D0%BE%D0%BB%D0%BE%D0%B2%D0%BD%D0%B0%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%9D%D0%BE%D0%B2%D0%B0%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D0%B0%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%9D%D0%BE%D0%B2%D0%B0%20%D0%BD%D0%BE%D1%82%D0%B0%D1%82%D0%BA%D0%B0%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%A0%D0%B5%D0%B4%D0%B0%D0%B3%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D1%96%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%A0%D0%B5%D0%B4%D0%B0%D0%B3%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F%20%D0%BD%D0%BE%D1%82%D0%B0%D1%82%D0%BA%D0%B8%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%A0%D0%B5%D0%B4%D0%B0%D0%B3%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F%20%D0%BF%D0%B5%D1%80%D1%81%D0%BE%D0%BD%D0%B0%D0%BB%D1%8C%D0%BD%D0%B8%D1%85%20%D0%B4%D0%B0%D0%BD%D0%B8%D1%85%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%9A%D0%BE%D1%88%D0%B8%D0%BA%20(%D0%9F%D0%9A).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%93%D0%BE%D0%BB%D0%BE%D0%B2%D0%BD%D0%B02%20(%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%93%D0%BE%D0%BB%D0%BE%D0%B2%D0%BD%D0%B0%20(%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%A0%D0%B5%D0%B4%D0%B0%D0%B3%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F%20%D0%BD%D0%BE%D1%82%D0%B0%D1%82%D0%BA%D0%B8%20(%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD).png)
+![Image](https://github.com/SerhiiShtepa/To_do_and_Notes/blob/main/%D0%86%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81/%D0%9A%D0%BE%D1%88%D0%B8%D0%BA%20(%D0%A2%D0%B5%D0%BB%D0%B5%D1%84%D0%BE%D0%BD).png)
