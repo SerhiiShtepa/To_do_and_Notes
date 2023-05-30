@@ -540,7 +540,7 @@
                         <div class="row row-cols-1 ms-0 w-100" style="height: fit-content;">
                             @if (viewMode == ViewMode.BYFOLDER)
                             {
-                                foreach (Models.Task task in TaskService.GetAllActiveTasks(selectedFolder.FolderId))
+                                foreach (Models.Task task in TaskService.GetAllActiveTasksByFolder(selectedFolder.FolderId))
                                 {
                                     if (task == null) { continue; }
                                     <div class="card mt-2 me-2">
@@ -565,7 +565,7 @@
                             }
                             else if (viewMode == ViewMode.ALL)
                             {
-                                foreach (Models.Task task in TaskService.GetAllActiveTasks())
+                                foreach (Models.Task task in TaskService.GetAllActiveTasks(userId))
                                 {
                                     if (task == null) { continue; }
                                     <div class="card mt-2 me-2">
@@ -596,7 +596,7 @@
                         <div class="row row-cols-2 g-2 mt-0 me-1 w-100" style="height: fit-content;">
                             @if (viewMode == ViewMode.BYFOLDER)
                             {
-                                foreach (Note note in NoteService.GetAllActiveNotes(selectedFolder.FolderId))
+                                foreach (Note note in NoteService.GetAllActiveNotesByFolder(selectedFolder.FolderId))
                                 {
                                     if (note == null) { continue; }
 
@@ -619,7 +619,7 @@
                             }
                             else if (viewMode == ViewMode.ALL)
                             {
-                                foreach (Note note in NoteService.GetAllActiveNotes())
+                                foreach (Note note in NoteService.GetAllActiveNotes(userId))
                                 {
                                     if (note == null) { continue; }
 

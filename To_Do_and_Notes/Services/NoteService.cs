@@ -23,14 +23,16 @@ namespace To_Do_and_Notes.Services
             _context.SaveChanges();
             return true;
         }
-        public List<Note> GetAllActiveNotes(int? folderId)
+        public List<Note> GetAllActiveNotesByFolder(int? folderId)
         {
             if (folderId == null) { return null; }
             return _context.Notes.Where(n => n.FolderId == folderId && n.IsDeleted == false).Include(f => f.Folder).ToList();
         }
-        public List<Note> GetAllActiveNotes()
+        public List<Note> GetAllActiveNotes(int? userId)
         {
-            return _context.Notes.Where(n => n.IsDeleted == false).Include(f => f.Folder).ToList();
+            if (userId == null) { return null; }
+            var info = _context.Notes.Include(n => n.Folder).ThenInclude(f => f.User).Where(n => n.Folder.UserId == userId && n.IsDeleted == false);
+            return info.ToList();
         }
         public List<Note> GetAlMarkedAsDeletedNotesByFolder(int? folderId)
         {

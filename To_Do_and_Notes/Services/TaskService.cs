@@ -25,14 +25,16 @@ namespace To_Do_and_Notes.Services
             _context.SaveChanges();
             return true;
         }
-        public List<Models.Task> GetAllActiveTasks(int? folderId)
+        public List<Models.Task> GetAllActiveTasksByFolder(int? folderId)
         {
             if (folderId == null) { return null; }
             return _context.Tasks.Where(t => t.FolderId == folderId && t.IsDeleted == false).ToList();
         }
-        public List<Models.Task> GetAllActiveTasks()
+        public List<Models.Task> GetAllActiveTasks(int? userId)
         {
-            return _context.Tasks.Where(t => t.IsDeleted == false).ToList();
+            if (userId == null) { return null; }
+            var info = _context.Tasks.Include(t => t.Folder).ThenInclude(f => f.User).Where(t => t.Folder.UserId == userId && t.IsDeleted == false);
+            return info.ToList();
         }
         public List<Models.Task> GetAllMarkedAsDeletedTasksByFolder(int? folderId)
         {
